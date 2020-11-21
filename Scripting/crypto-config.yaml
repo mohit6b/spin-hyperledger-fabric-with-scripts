@@ -1,0 +1,33 @@
+OrdererOrgs:
+
+  - Name: edge
+    Domain: edg
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+
+  - Name: curl
+    Domain: crl
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+
+PeerOrgs:
+
+  - Name: edges
+    Domain: edgs
+    EnableNodeOUs: true
+    Template:
+      Count: 3
+    Users:
+      Count: 2
+
+
+  - Name: curlhg
+    Domain: 2
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 2
+

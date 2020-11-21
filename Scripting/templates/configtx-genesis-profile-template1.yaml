@@ -1,0 +1,7 @@
+
+    $GENESIS_NAME:
+        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults

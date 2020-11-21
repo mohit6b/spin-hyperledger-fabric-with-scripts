@@ -1,0 +1,178 @@
+version: '2'
+
+services:
+
+  orderer0.edg:
+    container_name: orderer0.edg
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=edge
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto/ordererOrganizations/edg/orderers/orderer0.edg/msp:/var/hyperledger/orderer/msp
+        - ../crypto/ordererOrganizations/edg/orderers/orderer0.edg/tls/:/var/hyperledger/orderer/tls
+        - orderer0.edg:/var/hyperledger/production/orderer
+    ports:
+      - 7060:7050
+
+  orderer1.edg:
+    container_name: orderer1.edg
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=edge
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto/ordererOrganizations/edg/orderers/orderer1.edg/msp:/var/hyperledger/orderer/msp
+        - ../crypto/ordererOrganizations/edg/orderers/orderer1.edg/tls/:/var/hyperledger/orderer/tls
+        - orderer1.edg:/var/hyperledger/production/orderer
+    ports:
+      - 7070:7050
+
+  orderer0.crl:
+    container_name: orderer0.crl
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=curl
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto/ordererOrganizations/crl/orderers/orderer0.crl/msp:/var/hyperledger/orderer/msp
+        - ../crypto/ordererOrganizations/crl/orderers/orderer0.crl/tls/:/var/hyperledger/orderer/tls
+        - orderer0.crl:/var/hyperledger/production/orderer
+    ports:
+      - 7080:7050
+
+  orderer1.crl:
+    container_name: orderer1.crl
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=curl
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto/ordererOrganizations/crl/orderers/orderer1.crl/msp:/var/hyperledger/orderer/msp
+        - ../crypto/ordererOrganizations/crl/orderers/orderer1.crl/tls/:/var/hyperledger/orderer/tls
+        - orderer1.crl:/var/hyperledger/production/orderer
+    ports:
+      - 7090:7050
+
+  peer0.edgs:
+    container_name: peer0.edgs
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_ihx
+      - CORE_PEER_ID=peer0.edgs
+      - CORE_PEER_ADDRESS=peer0.edgs:8050
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8050
+      - CORE_PEER_CHAINCODEADDRESS=peer0.edgs:8051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.edgs:8050
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.edgs:8050
+      - CORE_PEER_LOCALMSPID=edges
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto/peerOrganizations/edgs/peers/peer0.edgs/msp:/etc/hyperledger/fabric/msp
+        - ../crypto/peerOrganizations/edgs/peers/peer0.edgs/tls:/etc/hyperledger/fabric/tls
+        - peer0.edgs:/var/hyperledger/production
+    ports:
+      - 8050:8050
+
+  peer1.edgs:
+    container_name: peer1.edgs
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_ihx
+      - CORE_PEER_ID=peer1.edgs
+      - CORE_PEER_ADDRESS=peer1.edgs:8060
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8060
+      - CORE_PEER_CHAINCODEADDRESS=peer1.edgs:8061
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.edgs:8050
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.edgs:8060
+      - CORE_PEER_LOCALMSPID=edges
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto/peerOrganizations/edgs/peers/peer1.edgs/msp:/etc/hyperledger/fabric/msp
+        - ../crypto/peerOrganizations/edgs/peers/peer1.edgs/tls:/etc/hyperledger/fabric/tls
+        - peer1.edgs:/var/hyperledger/production
+    ports:
+      - 8060:8060
+
+  peer2.edgs:
+    container_name: peer2.edgs
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_ihx
+      - CORE_PEER_ID=peer2.edgs
+      - CORE_PEER_ADDRESS=peer2.edgs:8070
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8070
+      - CORE_PEER_CHAINCODEADDRESS=peer2.edgs:8071
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8071
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.edgs:8050
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.edgs:8070
+      - CORE_PEER_LOCALMSPID=edges
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto/peerOrganizations/edgs/peers/peer2.edgs/msp:/etc/hyperledger/fabric/msp
+        - ../crypto/peerOrganizations/edgs/peers/peer2.edgs/tls:/etc/hyperledger/fabric/tls
+        - peer2.edgs:/var/hyperledger/production
+    ports:
+      - 8070:8070
+
+  peer0.2:
+    container_name: peer0.2
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_ihx
+      - CORE_PEER_ID=peer0.2
+      - CORE_PEER_ADDRESS=peer0.2:8080
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8080
+      - CORE_PEER_CHAINCODEADDRESS=peer0.2:8081
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8081
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.2:8080
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.2:8080
+      - CORE_PEER_LOCALMSPID=curlhg
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto/peerOrganizations/2/peers/peer0.2/msp:/etc/hyperledger/fabric/msp
+        - ../crypto/peerOrganizations/2/peers/peer0.2/tls:/etc/hyperledger/fabric/tls
+        - peer0.2:/var/hyperledger/production
+    ports:
+      - 8080:8080
+
+  peer1.2:
+    container_name: peer1.2
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_ihx
+      - CORE_PEER_ID=peer1.2
+      - CORE_PEER_ADDRESS=peer1.2:8090
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8090
+      - CORE_PEER_CHAINCODEADDRESS=peer1.2:8091
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8091
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.2:8080
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.2:8090
+      - CORE_PEER_LOCALMSPID=curlhg
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto/peerOrganizations/2/peers/peer1.2/msp:/etc/hyperledger/fabric/msp
+        - ../crypto/peerOrganizations/2/peers/peer1.2/tls:/etc/hyperledger/fabric/tls
+        - peer1.2:/var/hyperledger/production
+    ports:
+      - 8090:8090

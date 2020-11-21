@@ -1,0 +1,42 @@
+version: '2'
+
+networks:
+  ihx:
+
+services:
+
+  ca_edges:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-edges
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.edgs-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/453cb7c11f6ade081777e315367e7033652d7c054d108f1206d0bd86a058642a_sk
+      - FABRIC_CA_SERVER_PORT=7054
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.edgs-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/453cb7c11f6ade081777e315367e7033652d7c054d108f1206d0bd86a058642a_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto/peerOrganizations/edgs/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_edges
+    networks:
+      - ihx
+
+  ca_curlhg:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-curlhg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.2-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/de406adfaf19ed870370cd1a40129fbc16c4c43acc1abee791dcb53683d9ec68_sk
+      - FABRIC_CA_SERVER_PORT=8054
+    ports:
+      - "8054:8054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.2-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/de406adfaf19ed870370cd1a40129fbc16c4c43acc1abee791dcb53683d9ec68_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto/peerOrganizations/2/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_curlhg
+    networks:
+      - ihx

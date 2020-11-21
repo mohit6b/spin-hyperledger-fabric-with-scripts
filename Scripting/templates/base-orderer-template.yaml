@@ -1,0 +1,15 @@
+
+  $ORDERER_NAME:
+    container_name: $ORDERER_NAME
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_LOCALMSPID=$ORDERER_MSP
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto/ordererOrganizations/$ORDERER_DOMAIN/orderers/$ORDERER_NAME/msp:/var/hyperledger/orderer/msp
+        - ../crypto/ordererOrganizations/$ORDERER_DOMAIN/orderers/$ORDERER_NAME/tls/:/var/hyperledger/orderer/tls
+        - $ORDERER_NAME:/var/hyperledger/production/orderer
+    ports:
+      - $ORDERER_PORT:$MAIN_PORT

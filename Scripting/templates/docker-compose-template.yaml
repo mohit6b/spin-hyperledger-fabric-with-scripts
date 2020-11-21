@@ -1,0 +1,8 @@
+
+  $CONTAINER_NAME:
+    container_name: $CONTAINER_NAME
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: $CONTAINER_NAME
+    networks:
+      - $NETWORK_NAME

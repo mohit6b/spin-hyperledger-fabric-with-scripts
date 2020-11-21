@@ -1,0 +1,13 @@
+
+Orderer: &OrdererDefaults
+
+    OrdererType: $ORDERER_TYPE
+    Addresses:
+$ORDERER_ADDRESSES
+
+    BatchTimeout: $BATCH_TIMEOUTs
+    BatchSize:
+        MaxMessageCount: $MAX_MESSAGE_COUNT
+        AbsoluteMaxBytes: $ABSOLUTE_MAX_BYTES MB
+        PreferredMaxBytes: $PREFERRED_MAX_BYTES KB
+

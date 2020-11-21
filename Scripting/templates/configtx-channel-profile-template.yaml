@@ -1,0 +1,9 @@
+
+    $CHANNEL_NAME:
+        Consortium: $CONSORTIUM
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations: $CHANNEL_ORGS
+            Capabilities:
+                <<: *ApplicationCapabilities

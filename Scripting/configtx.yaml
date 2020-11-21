@@ -1,0 +1,237 @@
+Organizations:
+
+    - &edge
+        Name: edge
+        ID: edge
+        MSPDir: crypto/ordererOrganizations/edg/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('edge.member', 'edge.client', 'edge.peer', 'edge.admin')"
+            Writers:
+                Type: Signature
+                Rule: "OR('edge.member', 'edge.client', 'edge.peer', 'edge.admin')"
+            Admins:
+                Type: Signature
+                Rule: "OR('edge.member', 'edge.client', 'edge.peer', 'edge.admin')"
+    - &curl
+        Name: curl
+        ID: curl
+        MSPDir: crypto/ordererOrganizations/crl/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('curl.member', 'curl.client', 'curl.peer', 'curl.admin')"
+            Writers:
+                Type: Signature
+                Rule: "OR('curl.member', 'curl.client', 'curl.peer', 'curl.admin')"
+            Admins:
+                Type: Signature
+                Rule: "OR('curl.member', 'curl.client', 'curl.peer', 'curl.admin')"
+    - &edges
+        Name: edges
+        ID: edges
+        MSPDir: crypto/peerOrganizations/edgs/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('edges.member', 'edges.client', 'edges.peer', 'edges.admin')"
+            Writers:
+                Type: Signature
+                Rule: "OR('edges.member', 'edges.client', 'edges.peer', 'edges.admin')"
+            Admins:
+                Type: Signature
+                Rule: "OR('edges.member', 'edges.client', 'edges.peer', 'edges.admin')"
+        AnchorPeers:
+            - Host: peer0.edgs
+              Port: 8050
+    - &curlhg
+        Name: curlhg
+        ID: curlhg
+        MSPDir: crypto/peerOrganizations/2/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('curlhg.member', 'curlhg.client', 'curlhg.peer', 'curlhg.admin')"
+            Writers:
+                Type: Signature
+                Rule: "OR('curlhg.member', 'curlhg.client', 'curlhg.peer', 'curlhg.admin')"
+            Admins:
+                Type: Signature
+                Rule: "OR('curlhg.member', 'curlhg.client', 'curlhg.peer', 'curlhg.admin')"
+        AnchorPeers:
+            - Host: peer0.2
+              Port: 8080
+Capabilities:
+    Channel: &ChannelCapabilities
+        V1_4_3: true
+        V1_3: false
+        V1_1: false
+    Orderer: &OrdererCapabilities
+        V1_4_2: true
+        V1_1: false
+    Application: &ApplicationCapabilities
+        V1_4_2: true
+        V1_3: false
+        V1_2: false
+        V1_1: false
+
+
+Application: &ApplicationDefaults
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+
+Orderer: &OrdererDefaults
+
+    OrdererType: etcdraft
+    Addresses:
+
+        - orderer0.edg:7050
+        - orderer1.edg:7050
+        - orderer0.crl:7050
+        - orderer1.crl:7050
+
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 11
+        AbsoluteMaxBytes: 100 MB
+        PreferredMaxBytes: 512 KB
+
+    EtcdRaft:
+        Consenters:
+
+            - Host: orderer0.edg
+              Port: 7050
+              ClientTLSCert: crypto/ordererOrganizations/edg/orderers/orderer0.edg/tls/server.crt
+              ServerTLSCert: crypto/ordererOrganizations/edg/orderers/orderer0.edg/tls/server.crt
+
+            - Host: orderer1.edg
+              Port: 7050
+              ClientTLSCert: crypto/ordererOrganizations/edg/orderers/orderer1.edg/tls/server.crt
+              ServerTLSCert: crypto/ordererOrganizations/edg/orderers/orderer1.edg/tls/server.crt
+
+            - Host: orderer0.crl
+              Port: 7050
+              ClientTLSCert: crypto/ordererOrganizations/crl/orderers/orderer0.crl/tls/server.crt
+              ServerTLSCert: crypto/ordererOrganizations/crl/orderers/orderer0.crl/tls/server.crt
+
+            - Host: orderer1.crl
+              Port: 7050
+              ClientTLSCert: crypto/ordererOrganizations/crl/orderers/orderer1.crl/tls/server.crt
+              ServerTLSCert: crypto/ordererOrganizations/crl/orderers/orderer1.crl/tls/server.crt
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+
+Channel: &ChannelDefaults
+    Policies:
+
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+
+
+Profiles:
+
+
+    genesiblock:
+        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+
+            EtcdRaft:
+                Consenters:
+
+                - Host: orderer0.edg
+                  Port: 7050
+                  ClientTLSCert: crypto/ordererOrganizations/edg/orderers/orderer0.edg/tls/server.crt
+                  ServerTLSCert: crypto/ordererOrganizations/edg/orderers/orderer0.edg/tls/server.crt
+
+                - Host: orderer1.edg
+                  Port: 7050
+                  ClientTLSCert: crypto/ordererOrganizations/edg/orderers/orderer1.edg/tls/server.crt
+                  ServerTLSCert: crypto/ordererOrganizations/edg/orderers/orderer1.edg/tls/server.crt
+
+                - Host: orderer1.crl
+                  Port: 7050
+                  ClientTLSCert: crypto/ordererOrganizations/crl/orderers/orderer1.crl/tls/server.crt
+                  ServerTLSCert: crypto/ordererOrganizations/crl/orderers/orderer1.crl/tls/server.crt
+            Addresses:
+
+                - orderer0.edg:7050
+
+                - orderer1.edg:7050
+
+                - orderer1.crl:7050
+
+            Organizations:
+
+                - *edge
+                - *curl
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+        Consortiums:
+
+            cons:
+                Organizations:
+                    - *edges
+                    - *curlhg
+
+    ChannelProfile:
+        Consortium: cons
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations: 
+                - *edges
+                - *curlhg
+            Capabilities:
+                <<: *ApplicationCapabilities

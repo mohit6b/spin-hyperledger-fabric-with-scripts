@@ -1,0 +1,5 @@
+
+$t- Host: $ORDERER_NAME
+$t  Port: $ORDERER_MAIN_PORT
+$t  ClientTLSCert: crypto/ordererOrganizations/$ORDERER_DOMAIN/orderers/$ORDERER_NAME/tls/server.crt
+$t  ServerTLSCert: crypto/ordererOrganizations/$ORDERER_DOMAIN/orderers/$ORDERER_NAME/tls/server.crt

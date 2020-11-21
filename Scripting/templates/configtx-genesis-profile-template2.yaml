@@ -1,0 +1,9 @@
+
+            Organizations:
+$ORDERER_ORGS
+            Capabilities:
+                <<: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+        Consortiums:
+$CONSORTIA

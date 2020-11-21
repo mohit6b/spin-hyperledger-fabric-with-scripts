@@ -1,0 +1,6 @@
+
+    - &$MSPID
+        Name: $MSPID
+        ID: $MSPID
+        MSPDir: crypto/$ORG_TYPE/$DOMAIN/msp
+        

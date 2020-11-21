@@ -1,0 +1,9 @@
+
+  - Name: $ORG_NAME
+    Domain: $ORG_DOMAIN
+    EnableNodeOUs: true
+    Template:
+      Count: $PEER_NUMBER
+    Users:
+      Count: $USER_NUMBER
+
